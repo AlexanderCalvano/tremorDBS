@@ -2,9 +2,8 @@ library(ggplot2)
 library(dplyr)
 library(gridExtra)
 
-# Read the matched CSV files (same as our analyses)
-left_ipsilateral <- read.csv('tremor_left_vta_left_matched.csv')  # Left tremor + Left VTA (ipsilateral)
-right_ipsilateral <- read.csv('tremor_right_vta_right_matched.csv')  # Right tremor + Right VTA (ipsilateral)
+left_ipsilateral <- read.csv('tremor_left_vta_left_matched.csv')
+right_ipsilateral <- read.csv('tremor_right_vta_right_matched.csv')
 
 # Create VTA volume comparison dataset
 vta_comparison <- rbind(
@@ -18,7 +17,7 @@ vta_comparison <- rbind(
   )
 )
 
-# Create RMS comparison dataset (ipsilateral - consistent with VTA)
+# Create RMS comparison dataset 
 rms_comparison <- rbind(
   data.frame(
     side = "Left",
@@ -30,8 +29,8 @@ rms_comparison <- rbind(
   )
 )
 
-# Define colors (same as violin_plot_rms.R)
-colors <- c("Left" = "#FFB366", "Right" = "#6B9BD2")  # Pastel orange for left, navy pastel blue for right
+# styling setup
+colors <- c("Left" = "#FFB366", "Right" = "#6B9BD2") 
 
 # Create VTA volume boxplot
 p_vta <- ggplot(vta_comparison, aes(x = side, y = volume, fill = side)) +
@@ -122,7 +121,7 @@ rms_stats <- rms_comparison %>%
 print(rms_stats)
 
 # Perform Wilcoxon tests
-cat("\n=== STATISTICAL TESTS ===\n")
+cat("\n----STATISTICAL TESTS ----\n")
 
 # VTA volume test
 cat("VTA Volume Wilcoxon Test:\n")
@@ -153,9 +152,3 @@ total_n_rms <- n1_rms + n2_rms
 z_score_rms <- qnorm(wilcox_rms$p.value/2)
 effect_size_rms <- abs(z_score_rms) / sqrt(total_n_rms)
 cat(sprintf("RMS Effect size (r): %.4f\n", effect_size_rms))
-
-cat("\nData points match between VTA and RMS analyses:\n")
-cat("Left side:", nrow(vta_comparison[vta_comparison$side == "Left",]), "VTA,", 
-    nrow(rms_comparison[rms_comparison$side == "Left",]), "RMS\n")
-cat("Right side:", nrow(vta_comparison[vta_comparison$side == "Right",]), "VTA,", 
-    nrow(rms_comparison[rms_comparison$side == "Right",]), "RMS\n")

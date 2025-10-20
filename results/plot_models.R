@@ -19,7 +19,7 @@ cor_lm_right <- cor(data_right$y, data_right$pred_lm)
 r2_pls_right <- cor_pls_right^2
 r2_lm_right <- cor_lm_right^2
 
-# Set consistent axis limits for all plots
+# Set consistent axis limits
 all_values <- c(data_left$y, data_left$pred_pls, data_left$pred_lm,
                 data_right$y, data_right$pred_pls, data_right$pred_lm)
 x_min <- min(all_values)
@@ -118,7 +118,7 @@ combined_plot_2x2 <- grid.arrange(
   nrow = 2, ncol = 2
 )
 
-# Save individual plots in very high resolution (more square-shaped)
+# Save individual plots in high res resolution 
 ggsave("local_plotting/true_vs_predicted_PLS_left.png", plot_pls_left, 
        width = 6, height = 6, dpi = 600)
 ggsave("local_plotting/true_vs_predicted_PLS_right.png", plot_pls_right, 
@@ -128,20 +128,6 @@ ggsave("local_plotting/true_vs_predicted_LM_left.png", plot_lm_left,
 ggsave("local_plotting/true_vs_predicted_LM_right.png", plot_lm_right, 
        width = 6, height = 6, dpi = 600)
 
-# Save 2x2 combined plot in very high resolution (more square overall)
 ggsave("local_plotting/true_vs_predicted_2x2_combined.png", combined_plot_2x2, 
        width = 12, height = 12, dpi = 600)
-
-# Print summary statistics
-cat("Summary Statistics:\n")
-cat("==================\n")
-cat("Left Hemisphere:\n")
-cat("  PLS Model - r:", round(cor_pls_left, 4), ", R²:", round(r2_pls_left, 4), "\n")
-cat("  LM Model  - r:", round(cor_lm_left, 4), ", R²:", round(r2_lm_left, 4), "\n\n")
-
-cat("Right Hemisphere:\n")
-cat("  PLS Model - r:", round(cor_pls_right, 4), ", R²:", round(r2_pls_right, 4), "\n")
-cat("  LM Model  - r:", round(cor_lm_right, 4), ", R²:", round(r2_lm_right, 4), "\n\n")
-
-# Display the 2x2 plot
 print(combined_plot_2x2)

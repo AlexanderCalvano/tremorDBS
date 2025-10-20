@@ -79,11 +79,11 @@ def create_separate_hemisphere_plot():
     # Load ROI co-ordinates from Desikan atlas
     roi_coordinates = get_roi_coordinates()
     
-    # Create custom colourmaps: orange for left, blue for right hemisphere
+    # Create  colourmaps
     orange_cmap = LinearSegmentedColormap.from_list('orange', ['#FFD580', '#FF9933', '#E67300', '#993D00'], N=256)
     blue_cmap = LinearSegmentedColormap.from_list('blue', ['#D6E9FF', '#66B2FF', '#0073E6', '#003366'], N=256)
     
-    # Setup figure: 2 rows (left/right), 4 columns (3 views + 1 colourbar)
+    # Setup figure
     fig = plt.figure(figsize=(20, 16))
     gs = fig.add_gridspec(2, 4, width_ratios=[1, 1, 1, 0.15], hspace=0.4, wspace=0.1)
     
@@ -170,7 +170,7 @@ def create_separate_hemisphere_plot():
         
         ax.set_title(title, fontsize=12, fontweight='bold', y=1.05)
     
-    # Plot right hemisphere (bottom row) - same process as left
+    # Plot right hemisphere (bottom row) - same as left
     for i, (view, title) in enumerate(zip(views, right_titles)):
         ax = fig.add_subplot(gs[1, i])
         
@@ -295,8 +295,6 @@ def create_separate_hemisphere_plot():
     
     plt.savefig('component1_separate_hemispheres.png', dpi=300, bbox_inches='tight')
     plt.savefig('component1_separate_hemispheres.pdf', bbox_inches='tight')
-    
-    print("Plot saved: component1_separate_hemispheres.png/pdf")
 
 if __name__ == "__main__":
     create_separate_hemisphere_plot()

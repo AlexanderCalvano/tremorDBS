@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
-Extract Desikan Parcellation ROI Centroids from Coordinate File
+Extract Desikan Parcellation ROI Centroids from desikan_supratent_gm_coords.txt file
 
-This script reads the desikan_supratent_gm_coords.txt file and separates
-the coordinates into left and right hemisphere CSV files for glass brain plotting.
 """
 
 import numpy as np
@@ -14,9 +12,6 @@ def extract_and_save_centroids(input_file='desikan_supratent_gm_coords.txt',
                                 output_right='desikan_right_centroids_mni.csv',
                                 output_subcortical='desikan_subcortical_centroids_mni.csv'):
     """
-    Extract centroid coordinates and save them as separate CSV files for both hemispheres and
-    subcortical structures.
-    
     Parameters:
     -----------
     input_file : str

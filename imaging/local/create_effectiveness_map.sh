@@ -27,9 +27,8 @@ normalize_rms() {
 }
 
 # Function to process VTAs and create the effectiveness maps
-# Using the  hemisphere-to-score mapping:
-# - Right tremor scores (tremor_right.csv) are used for left hemisphere VATs
-# - Left tremor scores (tremor_left.csv) are used for right hemisphere VATs
+# -Right tremor scores (tremor_right.csv) are used for left hemisphere VATs
+# -Left tremor scores (tremor_left.csv) are used for right hemisphere VATs
 process_vats() {
     local right_tremor_csv=$1  # For left hemisphere VATs
     local left_tremor_csv=$2   # For right hemisphere VATs
@@ -130,7 +129,7 @@ process_vats() {
     fslmaths "$weighted_sum_right" -div "$nonweighted_sum_right" -mas "$mask_right" "$effectiveness_map_right"
     fslmaths "$effectiveness_map_left" -add "$effectiveness_map_right" "$effectiveness_map_combined"
     
-    echo "donnnne. Output file is here: $output_dir"
+    echo "donnnne...file: $output_dir"
 }
 
 # Create temporary directory for preprocessed files
