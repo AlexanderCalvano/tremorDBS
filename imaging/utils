@@ -1,0 +1,8 @@
+check_file() {
+    if [ ! -f "$1" ]; then
+        echo "Error: File not found -> $1"
+        exit 1
+    else
+        echo "Verified: $1"
+    fi
+}
