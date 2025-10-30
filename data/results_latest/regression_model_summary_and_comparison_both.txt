@@ -1,0 +1,109 @@
+PLS model:
+----------
+
+Data: 	X dimension: 1547 82 
+	Y dimension: 1547 1
+Fit method: oscorespls
+Number of components considered: 6
+TRAINING: % variance explained
+          1 comps  2 comps  3 comps  4 comps  5 comps  6 comps
+X          33.199   41.724    61.67    63.95    65.62    68.55
+.outcome    2.436    8.734    11.19    15.17    16.93    17.49
+NULL
+
+Correlation true vs predicted:
+------------
+
+
+	Pearson's product-moment correlation
+
+data:  yy and p2
+t = 13.592, df = 1545, p-value < 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.2815541 0.3706089
+sample estimates:
+      cor 
+0.3268067 
+
+
+
+
+LM:
+----------
+
+
+Call:
+lm(formula = .outcome ~ ., data = dat)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.5915 -0.6403 -0.2222  0.4811  4.4769 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -3.5697575  0.1035876 -34.461   <2e-16 ***
+ssi         -0.0076787  0.0008147  -9.426   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.866 on 1545 degrees of freedom
+Multiple R-squared:  0.05438,	Adjusted R-squared:  0.05377 
+F-statistic: 88.85 on 1 and 1545 DF,  p-value: < 2.2e-16
+
+
+Correlation true vs predicted:
+------------
+
+
+	Pearson's product-moment correlation
+
+data:  yy and p1
+t = 9.3362, df = 1545, p-value < 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.1833681 0.2777343
+sample estimates:
+      cor 
+0.2310947 
+
+
+
+
+Model comparison by Williams/Steiger test for two dependent correlations
+----------
+
+
+  Results of a comparison of two overlapping correlations based on dependent groups
+
+Comparison between r.jk = 0.2311 and r.jh = 0.3268
+Difference: r.jk - r.jh = -0.0957
+Related correlation: r.kh = -0.0103
+Group size: n = 1547
+Null hypothesis: r.jk is equal to r.jh
+Alternative hypothesis: r.jk is not equal to r.jh (two-sided)
+Alpha: 0.05
+
+steiger1980: Steiger's (1980) modification of Dunn and Clark's z (1969) using average correlations
+  z = -2.8189, p-value = 0.0048
+  Null hypothesis rejected
+
+
+
+
+
+T-test of pls true/predicted vs permutation models:
+------------
+
+
+	One Sample t-test
+
+data:  permcor
+t = -121.4, df = 99, p-value < 2.2e-16
+alternative hypothesis: true mean is not equal to 0.3268067
+95 percent confidence interval:
+ -0.005453239  0.005232995
+sample estimates:
+    mean of x 
+-0.0001101215 
+

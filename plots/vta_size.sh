@@ -19,8 +19,6 @@ if [[ ! -f "$ORDERED_TREMOR" ]]; then
     exit 1
 fi
 
-echo "Calculating VTA volumes..."
-
 # Function to process a single VTA and get volume
 process_vta() {
     local subject=$1
@@ -46,9 +44,6 @@ process_vta() {
     fi
     return 1
 }
-
-echo "subject,side,contact,amp,volume_mm3" > "$LEFT_VOLUMES"
-echo "subject,side,contact,amp,volume_mm3" > "$RIGHT_VOLUMES"
 
 # Extract unique VTA configurations
 TEMP_UNIQUE=$(mktemp)
@@ -91,10 +86,6 @@ while IFS=, read -r subject_clean side_clean contact_clean amp_clean; do
 done < "$TEMP_UNIQUE"
 
 rm "$TEMP_UNIQUE"
-
-echo -e "\nVolume calculation complete..."
-echo "Left: $left_processed/$left_count VTAs"
-echo "Right: $right_processed/$right_count VTAs"
 
 # Calculate statistics
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

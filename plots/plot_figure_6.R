@@ -4,8 +4,8 @@ library(gridExtra)
 library(dplyr)
 
 # Read the data
-data_left <- read.csv("local_plotting/true_and_predicted_values_left.csv")
-data_right <- read.csv("local_plotting/true_and_predicted_values_right.csv")
+data_left <- read.csv("data/true_and_predicted_values_left.csv")
+data_right <- read.csv("data/true_and_predicted_values_right.csv")
 
 # Calculate correlation coefficients for left hemisphere
 cor_pls_left <- cor(data_left$y, data_left$pred_pls)

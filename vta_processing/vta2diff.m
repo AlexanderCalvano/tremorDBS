@@ -54,11 +54,8 @@ for s = 1:length(subjects)
                 error('No matching T1 file found.');
             end
         end
-    catch
-        warning('Missing T1 for subject %s. Skipping...', subject_id);
-        continue;
     end
-
+    
     % Get all stimulation folders (VTAs)
     vat_folders = dir(fullfile(VAT_DIR, '*_contact-*'));
     vat_folders = vat_folders([vat_folders.isdir]);
@@ -71,7 +68,7 @@ for s = 1:length(subjects)
         % Find the file inside the folder
         vat_files = dir(fullfile(vat_folder_path, '*.nii')); % Get all NIfTI files
         if isempty(vat_files)
-            warning('No VAT file found in %s. Skipping...', vat_folder_name);
+            warning('no VAT file found in %s.', vat_folder_name);
             continue;
         end
 
@@ -96,7 +93,7 @@ for s = 1:length(subjects)
             spm_jobman('run', matlabbatch);
             disp('SPM Coregistration completed.');
         catch ME
-            warning('SPM Coregistration failed for VAT %s. Error: %s', vat_files(1).name, ME.message);
+            warning('SPM Coregistration failed for VAT %s.', vat_files(1).name, ME.message);
             continue;
         end
 
@@ -123,5 +120,3 @@ for s = 1:length(subjects)
 
     disp(['Completed processing for subject: ', subject_id]);
 end
-
-disp('All VTAs processed !');
