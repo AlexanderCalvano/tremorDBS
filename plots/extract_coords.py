@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Extract Desikan Parcellation ROI Centroids from desikan_supratent_gm_coords.txt file
-
-"""
+#extract Desikan parcellation from desikan_supratent_gm_coords.txt file
 
 import numpy as np
 import pandas as pd
@@ -11,19 +8,7 @@ def extract_and_save_centroids(input_file='desikan_supratent_gm_coords.txt',
                                 output_left='desikan_left_centroids_mni.csv',
                                 output_right='desikan_right_centroids_mni.csv',
                                 output_subcortical='desikan_subcortical_centroids_mni.csv'):
-    """
-    Parameters:
-    -----------
-    input_file : str
-        Path to the input coordinate file
-    output_left : str
-        Output CSV file for left hemisphere cortical ROIs (1001-1035)
-    output_right : str
-        Output CSV file for right hemisphere cortical ROIs (2001-2035)
-    output_subcortical : str
-        Output CSV file for subcortical structures (10-54)
-    """
-    
+   
     # Desikan-Killiany atlas ROI names
     cortical_labels = {
         # Left hemisphere (1001-1035)
@@ -166,14 +151,9 @@ def extract_and_save_centroids(input_file='desikan_supratent_gm_coords.txt',
     df_right.to_csv(output_right, index=False)
     df_subcortical.to_csv(output_subcortical, index=False)
     
-    print(f"\nExtracted {len(df_left) + len(df_right) + len(df_subcortical)} ROIs:")
-    print(f"  Left hemisphere: {len(df_left)}")
-    print(f"  Right hemisphere: {len(df_right)}")
-    print(f"  Subcortical: {len(df_subcortical)}")
-    
     return df_left, df_right, df_subcortical
 
 
 if __name__ == "__main__":
     df_left, df_right, df_subcortical = extract_and_save_centroids()
-    print("Extraction complete.")
+    print("all centroids extracted!")

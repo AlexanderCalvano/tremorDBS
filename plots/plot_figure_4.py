@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
-"""
-Visualise PLS Component Loadings: VTA-ROI Connectivity
 
-This script creates glass brain visualisations showing connections between
-VTA centres and brain ROIs, coloured by PLS loading strength.
-Separate visualisations are created for left and right hemispheres.
-"""
+#plot glass brains by using desikan killiany centroids per ROI
 
 import pandas as pd
 import numpy as np
@@ -17,7 +12,6 @@ from nilearn.image import coord_transform
 import matplotlib.gridspec as gridspec
 
 def get_roi_coordinates():
-    """Load MNI co-ordinates for ROIs from CSV files"""
     df_left = pd.read_csv('desikan_left_centroids_mni.csv')
     df_right = pd.read_csv('desikan_right_centroids_mni.csv')
     df_subcortical = pd.read_csv('desikan_subcortical_centroids_mni.csv')
@@ -42,7 +36,6 @@ def get_roi_coordinates():
     return roi_coords
 
 def get_vta_center_of_mass(vta_file):
-    """Extract centre of mass from VTA NIfTI file"""
     vta_img = nib.load(vta_file)
     vta_data = vta_img.get_fdata()
     
@@ -56,34 +49,24 @@ def get_vta_center_of_mass(vta_file):
     return centre_mni
 
 def create_separate_hemisphere_plot():
-    """
-    Create glass brain plots showing VTA-ROI connectivity for both hemispheres.
-    
-    The plot shows:
-    - Top 8 ROIs per hemisphere based on PLS Component 1 loadings
-    - Connections from VTA centre to each ROI
-    - Edge thickness/colour represents loading strength
-    - Orange colourmap for left hemisphere, blue for right hemisphere
-    """
-    # Load PLS component data and select top 8 ROIs per hemisphere
+    # Load PLS components and select top 8 ROIs per hemisphere
     pls_data = pd.read_csv('component_1_sorted_both.csv')
     left_rois = pls_data[pls_data['name'].str.startswith('l-')].head(8)
     right_rois = pls_data[pls_data['name'].str.startswith('r-')].head(8)
     
-    # Load VTA files and extract centre of mass co-ordinates
+    # Load VTA files in MNI
     vta_file_left = '../sweet_spot/nonweighted_sum_left.nii.gz'
     vta_file_right = '../sweet_spot/nonweighted_sum_right.nii.gz'
     vta_coord_left = get_vta_center_of_mass(vta_file_left)
     vta_coord_right = get_vta_center_of_mass(vta_file_right)
     
-    # Load ROI co-ordinates from Desikan atlas
     roi_coordinates = get_roi_coordinates()
     
-    # Create  colourmaps
+    # Create  the colourmaps for hemispheres
     orange_cmap = LinearSegmentedColormap.from_list('orange', ['#FFD580', '#FF9933', '#E67300', '#993D00'], N=256)
     blue_cmap = LinearSegmentedColormap.from_list('blue', ['#D6E9FF', '#66B2FF', '#0073E6', '#003366'], N=256)
     
-    # Setup figure
+    # Setup figure from Felix
     fig = plt.figure(figsize=(20, 16))
     gs = fig.add_gridspec(2, 4, width_ratios=[1, 1, 1, 0.15], hspace=0.4, wspace=0.1)
     
@@ -93,11 +76,11 @@ def create_separate_hemisphere_plot():
     left_cbar_data = None
     right_cbar_data = None
     
-    # Plot left hemisphere (top row) - 3 orthogonal views
+    # Plot LH
     for i, (view, title) in enumerate(zip(views, left_titles)):
         ax = fig.add_subplot(gs[0, i])
         
-        # Prepare node co-ordinates: VTA centre + top 8 ROIs
+        # Prepare node co-ordinates
         left_coords = [vta_coord_left]
         left_node_names = ['VTA_L']
         for _, roi in left_rois.iterrows():
@@ -109,7 +92,7 @@ def create_separate_hemisphere_plot():
         left_coords = np.array(left_coords)
         n_left_nodes = len(left_coords)
         
-        # Create adjacency matrix: connect VTA (node 0) to each ROI with loading strength
+        # Create adjacency matrix
         left_adjacency = np.zeros((n_left_nodes, n_left_nodes))
         for j in range(1, n_left_nodes):
             roi_idx = j - 1
@@ -122,7 +105,7 @@ def create_separate_hemisphere_plot():
         left_min = np.percentile(left_loadings, 2) if len(left_loadings) > 0 else 0
         left_max = np.percentile(left_loadings, 98) if len(left_loadings) > 0 else 1
         
-        # Set node colours and sizes: VTA in grey, ROIs in orange gradient
+        # Set node colours and sizes
         left_node_colors = ['#808080']
         left_node_sizes = [150]
         for _, roi in left_rois.iterrows():
@@ -138,7 +121,7 @@ def create_separate_hemisphere_plot():
         left_vmin = np.percentile(left_values, 2) if len(left_values) > 0 else 0
         left_vmax = np.percentile(left_values, 98) if len(left_values) > 0 else 1
         
-        # Plot connections (edges)
+        # Plot connections, i.e. the edges
         if np.any(left_adjacency > 0):
             plotting.plot_connectome(
                 left_adjacency,
@@ -170,7 +153,7 @@ def create_separate_hemisphere_plot():
         
         ax.set_title(title, fontsize=12, fontweight='bold', y=1.05)
     
-    # Plot right hemisphere (bottom row) - same as left
+    # Plot RH (bottom row) - same as before for LH
     for i, (view, title) in enumerate(zip(views, right_titles)):
         ax = fig.add_subplot(gs[1, i])
         
@@ -185,7 +168,7 @@ def create_separate_hemisphere_plot():
         right_coords = np.array(right_coords)
         n_right_nodes = len(right_coords)
         
-        # Create adjacency matrix for right hemisphere
+        # Create adjacency matrix for RH
         right_adjacency = np.zeros((n_right_nodes, n_right_nodes))
         for j in range(1, n_right_nodes):
             roi_idx = j - 1
@@ -274,10 +257,6 @@ def create_separate_hemisphere_plot():
         cbar_right.set_ticks(tick_values)
         cbar_right.set_ticklabels([f'{val:.3f}' for val in tick_values])
     
-    # Add title and legend
-    fig.suptitle('Component 1 Loadings: VTA-ROI Connectivity (Separate Hemispheres)', 
-                 fontsize=16, fontweight='bold', y=0.95)
-    
     legend_elements = [
         plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='#808080', 
                   markersize=10, label='VTA Centers'),
@@ -292,9 +271,6 @@ def create_separate_hemisphere_plot():
     
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.08)
-    
-    plt.savefig('component1_separate_hemispheres.png', dpi=300, bbox_inches='tight')
-    plt.savefig('component1_separate_hemispheres.pdf', bbox_inches='tight')
 
 if __name__ == "__main__":
     create_separate_hemisphere_plot()
